@@ -17,7 +17,7 @@ if (process.env.REDISTOGO_URL) {
 	
 	var client = redis.createClient();
 	client.select((process.env.NODE_ENV || 'development').length);
-	
+
 }
 
 
@@ -43,6 +43,14 @@ app.post('/cities', urlencode, function(request, response){
 	});
 	
 });
+
+app.delete('/cities/:name', function(request, response){
+	client.hdel('cities', request.params.name, function(error){
+		if(error) throw error;
+		response.sendStatus(204);
+	});
+});
+
 
 // app.listen(3000, function(){
 // 	console.log('Listening on port 3000');
